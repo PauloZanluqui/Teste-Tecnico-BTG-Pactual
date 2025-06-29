@@ -12,20 +12,22 @@ namespace Api.Context
             _client = client;
         }
 
-        public async Task CriarTabelaSeNaoExistirAsync()
+        public async Task CriarTabelasSeNaoExistiremAsync()
         {
-            var tableName = "Accounts";
-            var tables = await _client.ListTablesAsync();
+            var existingTables = (await _client.ListTablesAsync()).TableNames;
 
-            if (tables.TableNames.Contains(tableName))
-            {
-                Console.WriteLine($"Tabela '{tableName}' já existe.");
-                return;
-            }
+            if (!existingTables.Contains("Accounts"))
+                await CriarTabelaAccounts();
 
+            if (!existingTables.Contains("Transactions"))
+                await CriarTabelaTransactions();
+        }
+
+        private async Task CriarTabelaAccounts()
+        {
             var request = new CreateTableRequest
             {
-                TableName = tableName,
+                TableName = "Accounts",
                 AttributeDefinitions = new List<AttributeDefinition>
                 {
                     new AttributeDefinition("DocumentNumber", ScalarAttributeType.S)
@@ -42,7 +44,32 @@ namespace Api.Context
             };
 
             await _client.CreateTableAsync(request);
-            Console.WriteLine($"Tabela '{tableName}' criada com sucesso.");
+            Console.WriteLine($"Tabela 'Accounts' criada com sucesso.");
         }
+
+        private async Task CriarTabelaTransactions()
+        {
+            var request = new CreateTableRequest
+            {
+                TableName = "Transactions",
+                AttributeDefinitions = new List<AttributeDefinition>
+                {
+                    new AttributeDefinition("TransactionId", ScalarAttributeType.S)
+                },
+                KeySchema = new List<KeySchemaElement>
+                {
+                    new KeySchemaElement("TransactionId", KeyType.HASH)
+                },
+                ProvisionedThroughput = new ProvisionedThroughput
+                {
+                    ReadCapacityUnits = 5,
+                    WriteCapacityUnits = 5
+                }
+            };
+
+            await _client.CreateTableAsync(request);
+            Console.WriteLine($"Tabela 'Transactions' criada com sucesso.");
+        }
+
     }
 }

@@ -20,9 +20,9 @@ namespace Api.Controllers
         {
             if (account == null) return BadRequest("Account cannot be null");
 
-            // Validação 1 – CPF (DocumentNumber) já existe
-            var existingByCpf = await _accountRepository.GetByKeyAsync(account.DocumentNumber);
-            if (existingByCpf != null) return Conflict("This CPF is already registered.");
+            // Validação 1 – DocumentNumber já existe
+            var existingByDocumentNumber = await _accountRepository.GetByKeyAsync(account.DocumentNumber);
+            if (existingByDocumentNumber != null) return Conflict("This CPF is already registered.");
 
             // Validação 2 – Agência + Conta já existe
             var allAccounts = await _accountRepository.GetAllAsync();

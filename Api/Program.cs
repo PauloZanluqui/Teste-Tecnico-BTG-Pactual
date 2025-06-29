@@ -21,6 +21,7 @@ builder.Services.AddSingleton<IAmazonDynamoDB>(new AmazonDynamoDBClient(credenti
 builder.Services.AddSingleton<IDynamoDBContext, DynamoDBContext>();
 
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
+builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 builder.Services.AddSingleton<DynamoInitializer>();
 
 builder.Services.AddControllers();
@@ -32,7 +33,7 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var initializer = scope.ServiceProvider.GetRequiredService<DynamoInitializer>();
-    await initializer.CriarTabelaSeNaoExistirAsync();
+    await initializer.CriarTabelasSeNaoExistiremAsync();
 }
 
 if (app.Environment.IsDevelopment())
