@@ -16,19 +16,23 @@ namespace Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateAccountAsync([FromBody] Account account)
+        public async Task<IActionResult> CreateAccountAsync([FromBody] CreateAccountRequest request)
         {
-            if (account == null) return BadRequest("Account cannot be null");
+            if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            // Validação 1 – DocumentNumber já existe
-            var existingByDocumentNumber = await _accountRepository.GetByKeyAsync(account.DocumentNumber);
+            var existingByDocumentNumber = await _accountRepository.GetByKeyAsync(request.DocumentNumber);
             if (existingByDocumentNumber != null) return Conflict("This CPF is already registered.");
 
-            // Validação 2 – Agência + Conta já existe
-            var allAccounts = await _accountRepository.GetAllAsync();
-            var duplicate = allAccounts.FirstOrDefault(a => a.Agency == account.Agency && a.AccountNumber == account.AccountNumber);
-
+            var duplicate = _accountRepository.GetByAgencyAndAccountNumberAsync(request.Agency, request.AccountNumber);
             if (duplicate != null) return Conflict("There is already an account registered with that branch and number.");
+
+            var account = new Account
+            {
+                DocumentNumber = request.DocumentNumber,
+                Agency = request.Agency,
+                AccountNumber = request.AccountNumber,
+                AvailableLimit = request.AvailableLimit
+            };
 
             await _accountRepository.CreateOrChangeAsync(account);
 
