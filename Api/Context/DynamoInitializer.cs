@@ -12,18 +12,18 @@ namespace Api.Context
             _client = client;
         }
 
-        public async Task CriarTabelasSeNaoExistiremAsync()
+        public async Task CreateTablesIfNotExistsAsync()
         {
             var existingTables = (await _client.ListTablesAsync()).TableNames;
 
             if (!existingTables.Contains("Accounts"))
-                await CriarTabelaAccounts();
+                await CreateTableAccounts();
 
             if (!existingTables.Contains("Transactions"))
-                await CriarTabelaTransactions();
+                await CreateTablesTransactions();
         }
 
-        private async Task CriarTabelaAccounts()
+        private async Task CreateTableAccounts()
         {
             var request = new CreateTableRequest
             {
@@ -44,10 +44,10 @@ namespace Api.Context
             };
 
             await _client.CreateTableAsync(request);
-            Console.WriteLine($"Tabela 'Accounts' criada com sucesso.");
+            Console.WriteLine($"Table 'Accounts' created successfully.");
         }
 
-        private async Task CriarTabelaTransactions()
+        private async Task CreateTablesTransactions()
         {
             var request = new CreateTableRequest
             {
@@ -68,7 +68,7 @@ namespace Api.Context
             };
 
             await _client.CreateTableAsync(request);
-            Console.WriteLine($"Tabela 'Transactions' criada com sucesso.");
+            Console.WriteLine($"Table 'Transactions' created successfully.");
         }
 
     }

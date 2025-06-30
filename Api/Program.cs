@@ -19,10 +19,10 @@ var config = new AmazonDynamoDBConfig
 
 builder.Services.AddSingleton<IAmazonDynamoDB>(new AmazonDynamoDBClient(credentials, config));
 builder.Services.AddSingleton<IDynamoDBContext, DynamoDBContext>();
+builder.Services.AddSingleton<DynamoInitializer>();
 
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
-builder.Services.AddSingleton<DynamoInitializer>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -43,7 +43,7 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var initializer = scope.ServiceProvider.GetRequiredService<DynamoInitializer>();
-    await initializer.CriarTabelasSeNaoExistiremAsync();
+    await initializer.CreateTablesIfNotExistsAsync();
 }
 
 if (app.Environment.IsDevelopment())
