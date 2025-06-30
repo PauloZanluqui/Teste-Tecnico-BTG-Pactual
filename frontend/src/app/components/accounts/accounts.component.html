@@ -23,17 +23,10 @@
             <td>{{ account.documentNumber }}</td>
             <td>{{ account.agency }}</td>
             <td>{{ account.accountNumber }}</td>
-            <td>
-                {{
-                account.availableLimit
-                | currency : "BRL" : "symbol" : "1.2-2" : "pt-BR"
-                }}
-            </td>
+            <td>{{ account.availableLimit | currency : "BRL" : "symbol" : "1.2-2" : "pt-BR" }}</td>
             <td style="display: flex; gap: 0.5rem">
-                <p-button pTooltip="Alterar Limite" icon="pi pi-pencil" class="p-button-rounded p-button-text"
-                    (onClick)="showModal(true, account)"></p-button>
-                <p-button pTooltip="Excluir Conta" icon="pi pi-trash" severity="danger"
-                    class="p-button-rounded p-button-text" (onClick)="deleteAccount(account.documentNumber)"></p-button>
+                <p-button pTooltip="Alterar Limite" icon="pi pi-pencil" class="p-button-rounded p-button-text" (onClick)="showModal(true, account)"></p-button>
+                <p-button pTooltip="Excluir Conta" icon="pi pi-trash" severity="danger" class="p-button-rounded p-button-text" (onClick)="deleteAccount(account.documentNumber)"></p-button>
             </td>
         </tr>
     </ng-template>
