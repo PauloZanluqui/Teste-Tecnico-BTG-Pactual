@@ -57,6 +57,7 @@
         <p-button
           pTooltip="Excluir Conta"
           icon="pi pi-trash"
+          severity="danger"
           class="p-button-rounded p-button-text"
           (onClick)="deleteAccount(account.documentNumber)"
         ></p-button>
@@ -96,7 +97,7 @@
       <label for="agency" class="form-label">Agência</label>
       <input
         pInputText
-        [disabled]="isEditing"
+        [readOnly]="isEditing"
         id="agency"
         class="form-input"
         formControlName="agency"
@@ -108,7 +109,7 @@
       <label for="accountNumber" class="form-label">Conta</label>
       <input
         pInputText
-		[disabled]="isEditing"
+        [readOnly]="isEditing"
         id="accountNumber"
         class="form-input"
         formControlName="accountNumber"

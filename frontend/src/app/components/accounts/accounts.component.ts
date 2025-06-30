@@ -72,8 +72,7 @@ export class AccountsComponent implements OnInit {
         accountNumber: account.accountNumber,
         availableLimit: account.availableLimit,
       });
-    }
-    else {
+    } else {
       this.accountForm.reset();
     }
     this.visible = true;
