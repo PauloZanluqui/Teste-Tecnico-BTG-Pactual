@@ -43,7 +43,7 @@ export class AccountsComponent implements OnInit {
     accounts: AccountModel[] = [];
     isLoading: boolean = true;
     isEditing: boolean = false;
-    value: string | undefined;
+    modalVisible: boolean = false;
 
     constructor(private api: ApiService) { }
 
@@ -61,8 +61,6 @@ export class AccountsComponent implements OnInit {
         this.isLoading = false;
     }
 
-    visible: boolean = false;
-
     showModal(isEditing: boolean = false, account?: AccountModel) {
         this.isEditing = isEditing;
         if (isEditing && account) {
@@ -75,11 +73,11 @@ export class AccountsComponent implements OnInit {
         } else {
             this.accountForm.reset();
         }
-        this.visible = true;
+        this.modalVisible = true;
     }
 
     hideModal() {
-        this.visible = false;
+        this.modalVisible = false;
         this.isEditing = false;
     }
 

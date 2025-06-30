@@ -1,0 +1,23 @@
+<p-dialog header="Transação" [modal]="true" [visible]="showModal" [style]="{ width: '25rem' }">
+    <form [formGroup]="transactionForm">
+        <span class="description-text">Preencha os campos abaixo.</span>
+
+        <div class="form-row">
+            <label for="accountDocumentNumber" class="form-label">Documento</label>
+            <p-inputmask id="accountDocumentNumber" class="form-input" mask="999.999.999-99"
+                variant="filled" formControlName="accountDocumentNumber" placeholder="999.999.999-99"></p-inputmask>
+        </div>
+
+        <div class="form-row">
+            <label for="transactionValue" class="form-label">Limite Disponível</label>
+            <p-inputnumber inputId="transactionValue" placeholder="R$" mode="currency" currency="BRL" locale="pt-BR"
+                formControlName="transactionValue"></p-inputnumber>
+        </div>
+
+        <div class="button-row">
+            <p-button label="Cancelar" severity="secondary" (click)="closeModal()"></p-button>
+            <p-button label="Salvar" (click)="createTransaction()"
+                [disabled]="transactionForm.invalid"></p-button>
+        </div>
+    </form>
+</p-dialog>

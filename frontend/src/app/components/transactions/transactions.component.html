@@ -1,10 +1,10 @@
 <p-table [value]="transactions" showGridlines [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10, 20, 30]"
-    [loading]="isLoading" [tableStyle]="{ 'min-width': '50rem' }">
+    [loading]="isLoading" sortField="transactionDate" [sortOrder]="-1" [tableStyle]="{ 'min-width': '50rem' }">
     <ng-template #caption>
         <div class="table-header">
             <h2>Transações</h2>
             <div style="display: flex; gap: 0.5rem">
-                <p-button label="Nova Transação" icon="pi pi-plus" rounded raised />
+                <p-button (onClick)="showModal()" label="Nova Transação" icon="pi pi-plus" rounded raised />
                 <p-button (onClick)="refreshTransactions()" icon="pi pi-refresh" rounded raised />
             </div>
         </div>
@@ -14,7 +14,7 @@
             <th>Id da Transação</th>
             <th>Documento</th>
             <th>Valor</th>
-            <th>Data da Transação</th>
+            <th pSortableColumn="transactionDate">Data da Transação <p-sortIcon field="transactionDate" /></th>
         </tr>
     </ng-template>
     <ng-template #body let-transaction>
@@ -31,3 +31,7 @@
         </tr>
     </ng-template>
 </p-table>
+
+<div *ngIf="modalVisible">
+    <app-create-transaction-modal [showModal]="modalVisible" (hideModal)="hideModal()"></app-create-transaction-modal>
+</div>
