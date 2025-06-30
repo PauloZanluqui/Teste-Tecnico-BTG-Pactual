@@ -1,3 +1,4 @@
+using api.Services;
 using Api.DTOs;
 using Api.Entities;
 using Microsoft.AspNetCore.Mvc;
@@ -8,79 +9,85 @@ namespace Api.Controllers
     [Route("account")]
     public class AccountController : ControllerBase
     {
-        private readonly IAccountRepository _accountRepository;
+        private readonly IAccountService _accountService;
 
-        public AccountController(IAccountRepository accountRepository)
+        public AccountController(IAccountService accountService)
         {
-            _accountRepository = accountRepository;
+            _accountService = accountService;
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateAccountAsync([FromBody] CreateAccountRequest request)
         {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
-
-            var existingByDocumentNumber = await _accountRepository.GetByKeyAsync(request.DocumentNumber);
-            if (existingByDocumentNumber != null) return Conflict("This CPF is already registered.");
-
-            var duplicate = _accountRepository.GetByAgencyAndAccountNumberAsync(request.Agency, request.AccountNumber);
-            if (duplicate != null) return Conflict("There is already an account registered with that branch and number.");
-
-            var account = new Account
+            try
             {
-                DocumentNumber = request.DocumentNumber,
-                Agency = request.Agency,
-                AccountNumber = request.AccountNumber,
-                AvailableLimit = request.AvailableLimit
-            };
-
-            await _accountRepository.CreateOrChangeAsync(account);
-
-            return CreatedAtAction(nameof(GetAccountByDocument), new { documentNumber = account.DocumentNumber }, account);
+                var account = await _accountService.CreateAccountAsync(request);
+                return CreatedAtAction(nameof(GetAccountByDocument), new { documentNumber = account.DocumentNumber }, account);
+            }
+            catch (Exception ex)
+            {
+                return Conflict(ex.Message);
+            }
         }
 
         [HttpGet("{documentNumber}")]
         public async Task<IActionResult> GetAccountByDocument(string documentNumber)
         {
-            var account = await _accountRepository.GetByKeyAsync(documentNumber);
-            if (account == null)
-                return NotFound();
+            try
+            {
+                if (string.IsNullOrEmpty(documentNumber))
+                    return BadRequest("Document number is required.");
 
-            return Ok(account);
+                var account = await _accountService.GetAccountByDocumentAsync(documentNumber);
+                return Ok(account);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAllAccountsAsync()
         {
-            var accounts = await _accountRepository.GetAllAsync();
-            return Ok(accounts);
+            try
+            {
+                var accounts = await _accountService.GetAccountsAsync();
+                return Ok(accounts);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPatch("changelimit/{documentNumber}")]
         public async Task<IActionResult> ChangeLimitAsync(string documentNumber, [FromBody] ChangeLimitRequest request)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+            try
+            {
+                var account = await _accountService.ChangeAccountLimitAsync(documentNumber, request.NewLimit);
 
-            var account = await _accountRepository.GetByKeyAsync(documentNumber);
-            if (account == null)
-                return NotFound("Account not found");
-
-            account.AvailableLimit = request.NewLimit;
-            await _accountRepository.CreateOrChangeAsync(account);
-
-            return Ok(account);
+                return Ok(account);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpDelete("{documentNumber}")]
         public async Task<IActionResult> DeleteAccountAsync(string documentNumber)
         {
-            var account = await _accountRepository.GetByKeyAsync(documentNumber);
-            if (account == null)
-                return NotFound("Account not found");
-
-            await _accountRepository.DeleteAsync(documentNumber);
-            return NoContent();
+            try
+            {
+                await _accountService.DeleteAccountAsync(documentNumber);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }
