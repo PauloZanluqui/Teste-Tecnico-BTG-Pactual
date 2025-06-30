@@ -56,7 +56,7 @@ export class AccountsComponent implements OnInit {
         try {
             this.accounts = await this.api.get<AccountModel[]>('/account');
         } catch (error) {
-            console.error('Erro ao atualizar contas:', error);
+            alert('Erro ao atualizar contas: ' + error);
         }
         this.isLoading = false;
     }
@@ -92,7 +92,7 @@ export class AccountsComponent implements OnInit {
             await this.refreshAccounts();
             this.hideModal();
         } catch (error) {
-            console.error('Erro ao salvar conta:', error);
+            alert('Erro ao salvar conta: ' + error);
         } finally {
             this.isLoading = false;
         }
@@ -110,7 +110,7 @@ export class AccountsComponent implements OnInit {
             });
             await this.refreshAccounts();
         } catch (error) {
-            console.error('Erro ao alterar limite:', error);
+            alert('Erro ao alterar limite: ' + error);
         } finally {
             this.isLoading = false;
             this.hideModal();
@@ -123,7 +123,7 @@ export class AccountsComponent implements OnInit {
             await this.api.delete(`/account/${documentNumber}`);
             await this.refreshAccounts();
         } catch (error) {
-            console.error('Erro ao excluir conta:', error);
+            alert('Erro ao excluir conta: ' + error);
         } finally {
             this.isLoading = false;
         }

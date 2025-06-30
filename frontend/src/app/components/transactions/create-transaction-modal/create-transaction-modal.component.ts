@@ -38,7 +38,7 @@ export class CreateTransactionModalComponent implements OnInit {
             await this.api.post('/transaction', transaction);
             this.closeModal();
         } catch (error) {
-            console.error('Erro ao salvar conta:', error);
+            alert('Erro ao salvar conta:' + error);
         }
     }
 

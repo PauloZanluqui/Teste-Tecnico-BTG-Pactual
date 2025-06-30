@@ -6,5 +6,10 @@
             routerLink="/accounts"></button>
         <button pButton type="button" label="Ir para Transações" class="p-button nav-button"
             routerLink="/transactions"></button>
+        <button pButton type="button" label="Nova Transação" class="p-button p-button-success nav-button" (click)="showModal()"></button>
     </div>
+</div>
+
+<div *ngIf="modalVisible">
+    <app-create-transaction-modal [showModal]="modalVisible" (hideModal)="hideModal()"></app-create-transaction-modal>
 </div>

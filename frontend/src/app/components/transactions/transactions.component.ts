@@ -30,7 +30,7 @@ export class TransactionsComponent implements OnInit {
         try {
             this.transactions = await this.api.get<TransactionModel[]>('/transaction');
         } catch (error) {
-            console.error('Erro ao atualizar transações:', error);
+            alert('Erro ao atualizar transações: ' + error);
         }
         this.isLoading = false;
     }
