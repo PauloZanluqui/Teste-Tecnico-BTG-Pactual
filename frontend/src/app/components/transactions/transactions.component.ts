@@ -7,6 +7,7 @@ import { CommonModule } from '@angular/common';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputMaskModule } from 'primeng/inputmask';
 import { CreateTransactionModalComponent } from "./create-transaction-modal/create-transaction-modal.component";
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
     selector: 'app-transactions',
@@ -30,7 +31,11 @@ export class TransactionsComponent implements OnInit {
         try {
             this.transactions = await this.api.get<TransactionModel[]>('/transaction');
         } catch (error) {
-            alert('Erro ao atualizar transações: ' + error);
+            if (error instanceof HttpErrorResponse) {
+                alert('Erro ao buscar transações: ' + error.error);
+            } else {
+                alert('Erro ao buscar transações');
+            }
         }
         this.isLoading = false;
     }

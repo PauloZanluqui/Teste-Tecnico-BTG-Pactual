@@ -15,6 +15,7 @@ import {
 import { InputTextModule } from 'primeng/inputtext';
 import { InputNumber } from 'primeng/inputnumber';
 import { Tooltip } from 'primeng/tooltip';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
     selector: 'app-accounts',
@@ -56,7 +57,12 @@ export class AccountsComponent implements OnInit {
         try {
             this.accounts = await this.api.get<AccountModel[]>('/account');
         } catch (error) {
-            alert('Erro ao atualizar contas: ' + error);
+            if (error instanceof HttpErrorResponse) {
+                alert('Erro ao buscar contas: ' + error.error);
+            }
+            else {
+                alert('Erro ao buscar contas');
+            }
         }
         this.isLoading = false;
     }
@@ -92,7 +98,12 @@ export class AccountsComponent implements OnInit {
             await this.refreshAccounts();
             this.hideModal();
         } catch (error) {
-            alert('Erro ao salvar conta: ' + error);
+            if (error instanceof HttpErrorResponse) {
+                alert('Erro ao salvar conta: ' + error.error);
+            }
+            else {
+                alert('Erro ao salvar conta');
+            }
         } finally {
             this.isLoading = false;
         }
@@ -110,7 +121,11 @@ export class AccountsComponent implements OnInit {
             });
             await this.refreshAccounts();
         } catch (error) {
-            alert('Erro ao alterar limite: ' + error);
+            if (error instanceof HttpErrorResponse) {
+                alert('Erro ao alterar limite: ' + error.error);
+            } else {
+                alert('Erro ao alterar limite');
+            }
         } finally {
             this.isLoading = false;
             this.hideModal();
@@ -123,7 +138,11 @@ export class AccountsComponent implements OnInit {
             await this.api.delete(`/account/${documentNumber}`);
             await this.refreshAccounts();
         } catch (error) {
-            alert('Erro ao excluir conta: ' + error);
+            if (error instanceof HttpErrorResponse) {
+                alert('Erro ao excluir conta: ' + error.error);
+            } else {
+                alert('Erro ao excluir conta');
+            }
         } finally {
             this.isLoading = false;
         }

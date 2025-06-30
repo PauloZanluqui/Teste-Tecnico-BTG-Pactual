@@ -7,6 +7,7 @@ import { InputNumber } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
 import { ApiService } from '../../../services/api.service';
 import { CreateTransactionModel } from '../../../models/transactionsModel';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
     selector: 'app-create-transaction-modal',
@@ -38,7 +39,11 @@ export class CreateTransactionModalComponent implements OnInit {
             await this.api.post('/transaction', transaction);
             this.closeModal();
         } catch (error) {
-            alert('Erro ao salvar conta:' + error);
+            if (error instanceof HttpErrorResponse) {
+                alert('Erro ao salvar conta: ' + error.error);
+            } else {
+                alert('Erro ao salvar conta');
+            }
         }
     }
 
