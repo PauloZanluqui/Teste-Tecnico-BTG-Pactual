@@ -7,4 +7,4 @@ import ptBr from '@angular/common/locales/pt';
 registerLocaleData(ptBr);
 
 bootstrapApplication(AppComponent, appConfig)
-  .catch((err) => console.error(err));
+    .catch((err) => console.error(err));

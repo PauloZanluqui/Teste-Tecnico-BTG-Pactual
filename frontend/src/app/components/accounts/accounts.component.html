@@ -1,145 +1,81 @@
-<p-table
-  [value]="accounts"
-  showGridlines
-  [paginator]="true"
-  [rows]="10"
-  [rowsPerPageOptions]="[10, 20, 30]"
-  [loading]="isLoading"
-  [tableStyle]="{ 'min-width': '50rem' }"
->
-  <ng-template #caption>
-    <div class="table-header">
-      <h2>Contas</h2>
-      <div style="display: flex; gap: 0.5rem">
-        <p-button
-          (onClick)="showModal()"
-          label="Novo"
-          icon="pi pi-plus"
-          rounded
-          raised
-        />
-        <p-button
-          (onClick)="refreshAccounts()"
-          icon="pi pi-refresh"
-          rounded
-          raised
-        />
-      </div>
-    </div>
-  </ng-template>
-  <ng-template #header>
-    <tr>
-      <th>Documento</th>
-      <th>Agencia</th>
-      <th>Conta</th>
-      <th>Limite</th>
-      <th></th>
-    </tr>
-  </ng-template>
-  <ng-template #body let-account>
-    <tr>
-      <td>{{ account.documentNumber }}</td>
-      <td>{{ account.agency }}</td>
-      <td>{{ account.accountNumber }}</td>
-      <td>
-        {{
-          account.availableLimit
-            | currency : "BRL" : "symbol" : "1.2-2" : "pt-BR"
-        }}
-      </td>
-      <td style="display: flex; gap: 0.5rem">
-        <p-button
-          pTooltip="Alterar Limite"
-          icon="pi pi-pencil"
-          class="p-button-rounded p-button-text"
-          (onClick)="showModal(true, account)"
-        ></p-button>
-        <p-button
-          pTooltip="Excluir Conta"
-          icon="pi pi-trash"
-          severity="danger"
-          class="p-button-rounded p-button-text"
-          (onClick)="deleteAccount(account.documentNumber)"
-        ></p-button>
-      </td>
-    </tr>
-  </ng-template>
-  <ng-template #emptymessage>
-    <tr>
-      <td colspan="4">Não existem contas cadastradas.</td>
-    </tr>
-  </ng-template>
+<p-table [value]="accounts" showGridlines [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10, 20, 30]"
+    [loading]="isLoading" [tableStyle]="{ 'min-width': '50rem' }">
+    <ng-template #caption>
+        <div class="table-header">
+            <h2>Contas</h2>
+            <div style="display: flex; gap: 0.5rem">
+                <p-button (onClick)="showModal()" label="Novo" icon="pi pi-plus" rounded raised />
+                <p-button (onClick)="refreshAccounts()" icon="pi pi-refresh" rounded raised />
+            </div>
+        </div>
+    </ng-template>
+    <ng-template #header>
+        <tr>
+            <th>Documento</th>
+            <th>Agencia</th>
+            <th>Conta</th>
+            <th>Limite</th>
+            <th></th>
+        </tr>
+    </ng-template>
+    <ng-template #body let-account>
+        <tr>
+            <td>{{ account.documentNumber }}</td>
+            <td>{{ account.agency }}</td>
+            <td>{{ account.accountNumber }}</td>
+            <td>
+                {{
+                account.availableLimit
+                | currency : "BRL" : "symbol" : "1.2-2" : "pt-BR"
+                }}
+            </td>
+            <td style="display: flex; gap: 0.5rem">
+                <p-button pTooltip="Alterar Limite" icon="pi pi-pencil" class="p-button-rounded p-button-text"
+                    (onClick)="showModal(true, account)"></p-button>
+                <p-button pTooltip="Excluir Conta" icon="pi pi-trash" severity="danger"
+                    class="p-button-rounded p-button-text" (onClick)="deleteAccount(account.documentNumber)"></p-button>
+            </td>
+        </tr>
+    </ng-template>
+    <ng-template #emptymessage>
+        <tr>
+            <td colspan="4">Não existem contas cadastradas.</td>
+        </tr>
+    </ng-template>
 </p-table>
 
-<p-dialog
-  header="Conta"
-  [modal]="true"
-  [(visible)]="visible"
-  [style]="{ width: '25rem' }"
->
-  <form [formGroup]="accountForm">
-    <span class="description-text">Preencha os campos abaixo.</span>
+<p-dialog header="Conta" [modal]="true" [(visible)]="visible" [style]="{ width: '25rem' }">
+    <form [formGroup]="accountForm">
+        <span class="description-text">Preencha os campos abaixo.</span>
 
-    <div class="form-row">
-      <label for="documentNumber" class="form-label">Documento</label>
-      <p-inputmask
-        id="documentNumber"
-        [disabled]="isEditing"
-        class="form-input"
-        mask="999.999.999-99"
-        variant="filled"
-        formControlName="documentNumber"
-        placeholder="999.999.999-99"
-      ></p-inputmask>
-    </div>
+        <div class="form-row">
+            <label for="documentNumber" class="form-label">Documento</label>
+            <p-inputmask id="documentNumber" [disabled]="isEditing" class="form-input" mask="999.999.999-99"
+                variant="filled" formControlName="documentNumber" placeholder="999.999.999-99"></p-inputmask>
+        </div>
 
-    <div class="form-row">
-      <label for="agency" class="form-label">Agência</label>
-      <input
-        pInputText
-        [readOnly]="isEditing"
-        id="agency"
-        class="form-input"
-        formControlName="agency"
-        autocomplete="off"
-      />
-    </div>
+        <div class="form-row">
+            <label for="agency" class="form-label">Agência</label>
+            <input pInputText [readOnly]="isEditing" id="agency" class="form-input" formControlName="agency"
+                autocomplete="off" />
+        </div>
 
-    <div class="form-row">
-      <label for="accountNumber" class="form-label">Conta</label>
-      <input
-        pInputText
-        [readOnly]="isEditing"
-        id="accountNumber"
-        class="form-input"
-        formControlName="accountNumber"
-        autocomplete="off"
-      />
-    </div>
+        <div class="form-row">
+            <label for="accountNumber" class="form-label">Conta</label>
+            <input pInputText [readOnly]="isEditing" id="accountNumber" class="form-input"
+                formControlName="accountNumber" autocomplete="off" />
+        </div>
 
-    <div class="form-row">
-      <label for="availableLimit" class="form-label">Limite Disponível</label>
-      <p-inputnumber
-        inputId="availableLimit"
-        placeholder="R$"
-        mode="currency"
-        currency="BRL"
-        locale="pt-BR"
-        formControlName="availableLimit"
-      ></p-inputnumber>
-    </div>
+        <div class="form-row">
+            <label for="availableLimit" class="form-label">Limite Disponível</label>
+            <p-inputnumber inputId="availableLimit" placeholder="R$" mode="currency" currency="BRL" locale="pt-BR"
+                formControlName="availableLimit"></p-inputnumber>
+        </div>
 
-    <div class="button-row">
-      <p-button
-        label="Cancelar"
-        severity="secondary"
-        (click)="hideModal()"
-      ></p-button>
-      <p-button
-        label="Salvar"
-        (click)="isEditing ? changeLimit() : createAccount()"
-        [disabled]="accountForm.invalid"
-      ></p-button>
-    </div>
-  </form>
+        <div class="button-row">
+            <p-button label="Cancelar" severity="secondary" (click)="hideModal()"></p-button>
+            <p-button label="Salvar" (click)="isEditing ? changeLimit() : createAccount()"
+                [disabled]="accountForm.invalid"></p-button>
+        </div>
+    </form>
 </p-dialog>

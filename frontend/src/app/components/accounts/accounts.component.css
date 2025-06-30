@@ -5,29 +5,29 @@
 }
 
 .description-text {
-  color: #6b7280;
-  display: block;
-  margin-bottom: 1rem;
+    color: #6b7280;
+    display: block;
+    margin-bottom: 1rem;
 }
 
 .form-row {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
 }
 
 .form-label {
-  font-weight: 600; 
-  width: 8rem;
+    font-weight: 600;
+    width: 8rem;
 }
 
 .form-input {
-  flex: 1;
+    flex: 1;
 }
 
 .button-row {
-  display: flex;
-  justify-content: flex-end;
-  gap: 0.5rem;
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
 }
