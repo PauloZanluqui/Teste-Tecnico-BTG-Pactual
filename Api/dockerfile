@@ -1,0 +1,35 @@
+# Etapa de build: usa SDK do .NET com Alpine para compilar a aplicação
+FROM mcr.microsoft.com/dotnet/sdk:8.0-alpine AS builder
+
+# Define o diretório de trabalho
+WORKDIR /api
+
+# Copia os arquivos de projeto e restaura as dependências
+COPY *.csproj ./
+RUN dotnet restore
+
+# Copia o restante dos arquivos e compila o projeto
+COPY . ./
+RUN dotnet publish -c Release -o /api/out
+
+#################################################################
+#################################################################
+#################################################################
+
+# Etapa de runtime: usa a imagem leve do ASP.NET Core baseada em Alpine
+FROM mcr.microsoft.com/dotnet/aspnet:8.0-alpine
+
+# Define o diretório de trabalho no container
+WORKDIR /api
+
+# Expõe a porta que sua aplicação irá usar
+EXPOSE 5201
+
+# Copia os arquivos compilados da etapa anterior
+COPY --from=builder /api/out ./
+
+# Copia arquivo de ambiente, se existir
+COPY appsettings.json ./appsettings.json
+
+# Comando de inicialização da aplicação
+ENTRYPOINT ["dotnet", "Api.dll"]
