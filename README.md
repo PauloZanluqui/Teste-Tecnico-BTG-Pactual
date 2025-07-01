@@ -45,8 +45,6 @@ Este projeto simula um sistema básico de gerenciamento de contas e transações
 
 #### Pré-requisitos:
 
-- [.NET 8 SDK](https://dotnet.microsoft.com/download)
-- [Node.js + Angular CLI](https://angular.io/guide/setup-local)
 - [Docker](https://www.docker.com/)
 
 #### 1. Clonar o repositório
