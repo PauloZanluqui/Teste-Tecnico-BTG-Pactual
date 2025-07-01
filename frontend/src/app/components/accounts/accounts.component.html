@@ -37,7 +37,7 @@
     </ng-template>
 </p-table>
 
-<p-dialog header="Conta" [modal]="true" [(visible)]="modalVisible" [style]="{ width: '25rem' }">
+<p-dialog header="Conta"  [closable]="false" [modal]="true" [(visible)]="modalVisible" [style]="{ width: '25rem' }">
     <form [formGroup]="accountForm">
         <span class="description-text">Preencha os campos abaixo.</span>
 
