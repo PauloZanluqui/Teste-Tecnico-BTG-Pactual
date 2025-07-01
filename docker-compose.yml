@@ -8,6 +8,8 @@ services:
     volumes:
       - ./docker/dynamodb:/home/dynamodblocal/data
     working_dir: /home/dynamodblocal
+    networks:
+      - rede-interna
 
   api:
     build:
@@ -15,19 +17,28 @@ services:
       dockerfile: Dockerfile
     container_name: api
     ports:
-      - "5201:5201"
+      - "5000:5000"
     environment:
       - AWS__ServiceURL=http://dynamodb-local:8000
       - AWS__AccessKey=fakeMyKeyId
       - AWS__SecretKey=fakeSecretAccessKey
     depends_on:
       - dynamodb-local
+    networks:
+      - rede-interna
     restart: always
 
-  # angular-app:
-  #   build:
-  #     context: ./frontend
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - "8080:8080"
-  #   restart: always
+  angular-app:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "8081:80"
+    networks:
+      - rede-interna
+    restart: always
+
+networks:
+  rede-interna:
+    driver: bridge
+    name: minha-rede-interna
