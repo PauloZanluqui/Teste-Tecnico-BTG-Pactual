@@ -106,7 +106,7 @@ docker compose up -d
 
 ### 🧑‍💻 Autor
 
-- **Seu Nome**
+- **Paulo Zanluqui**
 - Email: [paulozanluqui13@gmail.com](mailto:paulozanluqui13@gmail.com)
 - GitHub: [github.com/PauloZanluqui](https://github.com/PauloZanluqui)
 
